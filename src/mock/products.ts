@@ -19,8 +19,8 @@ export const products: Product[] = [
     installments: 12,
     badge: "mais-vendido",
     images: [
-      img("/pngimg.com - iphone16_PNG10.png", "iPhone 16 Pro Max — Desert Titanium"),
-      img("/pngimg.com - iphone16_PNG13.png", "iPhone 16 Pro Max — Black Titanium"),
+      img("/iphone16-10.webp", "iPhone 16 Pro Max — Desert Titanium"),
+      img("/iphone16-13.webp", "iPhone 16 Pro Max — Black Titanium"),
     ],
     storageVariants: [
       { id: "256gb", label: "256 GB", type: "storage", priceDelta: 0, available: true },
@@ -61,8 +61,8 @@ export const products: Product[] = [
     installments: 12,
     badge: "novo",
     images: [
-      img("/pngimg.com - iphone16_PNG4.png", "iPhone 16 Pro — Black Titanium"),
-      img("/pngimg.com - iphone16_PNG5.png", "iPhone 16 Pro — Desert Titanium"),
+      img("/iphone16-4.webp", "iPhone 16 Pro — Black Titanium"),
+      img("/iphone16-5.webp", "iPhone 16 Pro — Desert Titanium"),
     ],
     storageVariants: [
       { id: "128gb", label: "128 GB", type: "storage", priceDelta: 0, available: true },
@@ -103,8 +103,8 @@ export const products: Product[] = [
     installments: 12,
     badge: "novo",
     images: [
-      img("/pngimg.com - iphone16_PNG13.png", "iPhone 16 — Ultramarine"),
-      img("/pngimg.com - iphone16_PNG10.png", "iPhone 16 — Black"),
+      img("/iphone16-13.webp", "iPhone 16 — Ultramarine"),
+      img("/iphone16-10.webp", "iPhone 16 — Black"),
     ],
     storageVariants: [
       { id: "128gb", label: "128 GB", type: "storage", priceDelta: 0, available: true },
@@ -145,8 +145,8 @@ export const products: Product[] = [
     installments: 12,
     badge: "oferta",
     images: [
-      img("/pngimg.com - iphone16_PNG5.png", "iPhone 15 — Pink"),
-      img("/pngimg.com - iphone16_PNG4.png", "iPhone 15 — Black"),
+      img("/iphone16-5.webp", "iPhone 15 — Pink"),
+      img("/iphone16-4.webp", "iPhone 15 — Black"),
     ],
     storageVariants: [
       { id: "128gb", label: "128 GB", type: "storage", priceDelta: 0, available: true },
@@ -191,8 +191,8 @@ export const products: Product[] = [
     installments: 12,
     badge: "novo",
     images: [
-      img("/macbook-air-15-m4.jpeg", "MacBook Pro 14\" M4 Pro"),
-      img("/macbook-air-15-m4.jpeg", "MacBook Pro 14\" — detalhe teclado"),
+      img("/macbook-air-15-m4.webp", "MacBook Pro 14\" M4 Pro"),
+      img("/macbook-air-15-m4.webp", "MacBook Pro 14\" — detalhe teclado"),
     ],
     storageVariants: [
       { id: "512gb", label: "512 GB SSD", type: "storage", priceDelta: 0, available: true },
@@ -228,8 +228,8 @@ export const products: Product[] = [
     installments: 12,
     badge: "mais-vendido",
     images: [
-      img("/macbook-air-15-m4.jpeg", "MacBook Air 15\" M3 — Midnight"),
-      img("/macbook-air-15-m4.jpeg", "MacBook Air 15\" M3 — Starlight"),
+      img("/macbook-air-15-m4.webp", "MacBook Air 15\" M3 — Midnight"),
+      img("/macbook-air-15-m4.webp", "MacBook Air 15\" M3 — Starlight"),
     ],
     storageVariants: [
       { id: "512gb", label: "512 GB SSD", type: "storage", priceDelta: 0, available: true },
@@ -266,8 +266,8 @@ export const products: Product[] = [
     installments: 12,
     badge: undefined,
     images: [
-      img("/macbook-air-15-m4.jpeg", "MacBook Air 13\" M3 — Starlight"),
-      img("/macbook-air-15-m4.jpeg", "MacBook Air 13\" M3 — Midnight"),
+      img("/macbook-air-15-m4.webp", "MacBook Air 13\" M3 — Starlight"),
+      img("/macbook-air-15-m4.webp", "MacBook Air 13\" M3 — Midnight"),
     ],
     storageVariants: [
       { id: "256gb", label: "256 GB SSD", type: "storage", priceDelta: 0, available: true },
@@ -308,8 +308,8 @@ export const products: Product[] = [
     installments: 12,
     badge: "novo",
     images: [
-      img("/ipad_air__csidwp47jfue_large_2x.png", "iPad Pro 13\" M4 — Space Black"),
-      img("/ipad_air__csidwp47jfue_large_2x.png", "iPad Pro 13\" M4 — Silver"),
+      img("/ipad-air.webp", "iPad Pro 13\" M4 — Space Black"),
+      img("/ipad-air.webp", "iPad Pro 13\" M4 — Silver"),
     ],
     storageVariants: [
       { id: "256gb", label: "256 GB", type: "storage", priceDelta: 0, available: true },
@@ -345,8 +345,8 @@ export const products: Product[] = [
     installments: 12,
     badge: "mais-vendido",
     images: [
-      img("/ipad_air__csidwp47jfue_large_2x.png", "iPad Air 13\" M2 — Blue"),
-      img("/ipad_air__csidwp47jfue_large_2x.png", "iPad Air 13\" — traseira"),
+      img("/ipad-air.webp", "iPad Air 13\" M2 — Blue"),
+      img("/ipad-air.webp", "iPad Air 13\" — traseira"),
     ],
     storageVariants: [
       { id: "128gb", label: "128 GB", type: "storage", priceDelta: 0, available: true },
@@ -384,8 +384,8 @@ export const products: Product[] = [
     installments: 12,
     badge: "novo",
     images: [
-      img("/ipad_air__csidwp47jfue_large_2x.png", "iPad mini 7 — Starlight"),
-      img("/ipad_air__csidwp47jfue_large_2x.png", "iPad mini 7 — traseira"),
+      img("/ipad-air.webp", "iPad mini 7 — Starlight"),
+      img("/ipad-air.webp", "iPad mini 7 — traseira"),
     ],
     storageVariants: [
       { id: "128gb", label: "128 GB", type: "storage", priceDelta: 0, available: true },
@@ -425,8 +425,8 @@ export const products: Product[] = [
     installments: 12,
     badge: "mais-vendido",
     images: [
-      img("/png-transparent-airpods-pro.png", "AirPods Pro 2ª geração — White"),
-      img("/png-transparent-airpods-pro.png", "AirPods Pro 2 — fone"),
+      img("/airpods-pro.webp", "AirPods Pro 2ª geração — White"),
+      img("/airpods-pro.webp", "AirPods Pro 2 — fone"),
     ],
     storageVariants: [],
     colorVariants: [
@@ -457,8 +457,8 @@ export const products: Product[] = [
     installments: 12,
     badge: "novo",
     images: [
-      img("/png-transparent-airpods-pro.png", "AirPods 4 — White"),
-      img("/png-transparent-airpods-pro.png", "AirPods 4 com ANC"),
+      img("/airpods-pro.webp", "AirPods 4 — White"),
+      img("/airpods-pro.webp", "AirPods 4 com ANC"),
     ],
     storageVariants: [],
     colorVariants: [
