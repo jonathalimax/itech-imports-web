@@ -8,6 +8,12 @@ import { useCartStore } from "@/store/cart.store";
 import { PriceDisplay } from "@/components/ui/price-display";
 import { ProductBadgeLabel } from "@/components/ui/product-badge";
 import type { Product } from "@/types";
+import {
+  trackProductCardClick,
+  trackProductCardAddToCart,
+  trackAddToCart,
+  trackCartDrawerOpened,
+} from "@/lib/analytics";
 
 interface ProductCardProps {
   product: Product;
@@ -37,6 +43,15 @@ export function ProductCard({ product }: ProductCardProps) {
       price,
       quantity: 1,
     });
+    trackProductCardAddToCart(product.id, product.name, price);
+    trackAddToCart(
+      product.id,
+      product.name,
+      defaultStorage?.label ?? "Padrão",
+      defaultColor?.label ?? "Padrão",
+      price
+    );
+    trackCartDrawerOpened("add_to_cart");
     openCart();
   }
 
@@ -48,6 +63,7 @@ export function ProductCard({ product }: ProductCardProps) {
       <Link
         href={`/produto/${product.slug}`}
         className="group relative flex flex-col rounded-2xl bg-white/[0.03] border border-white/[0.06] overflow-hidden hover:border-white/[0.14] transition-all duration-300 hover:bg-white/[0.05]"
+        onClick={() => trackProductCardClick(product.id, product.name, product.category, price)}
       >
         {/* Badge */}
         {product.badge && (

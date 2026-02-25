@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion, useInView, type Variants } from "framer-motion";
 import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
+import { trackCategoryCardClick } from "@/lib/analytics";
 
 const categories = [
   {
@@ -91,6 +92,7 @@ export function CategoryGrid() {
               <Link
                 href={`/${cat.slug}`}
                 className="group relative flex flex-col h-48 sm:h-56 rounded-2xl overflow-hidden border border-white/[0.08] bg-white/[0.02] hover:border-white/[0.15] transition-all duration-300 hover:-translate-y-1"
+                onClick={() => trackCategoryCardClick(cat.slug)}
               >
                 {/* Background gradient */}
                 <div

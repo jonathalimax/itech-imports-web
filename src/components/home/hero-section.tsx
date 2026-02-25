@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronDown } from "lucide-react";
+import { trackHeroCtaClick } from "@/lib/analytics";
 
 const containerVariants = {
   hidden: {},
@@ -80,7 +81,7 @@ export function HeroSection() {
                 className="bg-[#0A84FF] hover:bg-[#0A84FF]/90 text-white rounded-full px-8 font-medium text-base glow-blue transition-all duration-300 hover:scale-[1.02]"
                 asChild
               >
-                <Link href="/iphone">
+                <Link href="/iphone" onClick={() => trackHeroCtaClick("comprar_agora")}>
                   Comprar agora
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -91,7 +92,7 @@ export function HeroSection() {
                 className="border-white/[0.15] text-white hover:bg-white/5 rounded-full px-8 font-medium text-base backdrop-blur-sm"
                 asChild
               >
-                <Link href="/iphone">Ver todos os produtos</Link>
+                <Link href="/iphone" onClick={() => trackHeroCtaClick("ver_todos")}>Ver todos os produtos</Link>
               </Button>
             </motion.div>
 

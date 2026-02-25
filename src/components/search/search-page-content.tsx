@@ -6,6 +6,13 @@ import { Search, X } from "lucide-react";
 import { searchProducts } from "@/lib/search";
 import { ProductCard } from "@/components/product/product-card";
 import type { Product } from "@/types";
+import {
+  trackSearchPerformed,
+  trackSearchCleared,
+  trackSearchNoResults,
+  trackSearchResultClick,
+  trackSearchCategoryShortcutClick,
+} from "@/lib/analytics";
 
 export function SearchPageContent() {
   const searchParams = useSearchParams();
@@ -18,7 +25,13 @@ export function SearchPageContent() {
   useEffect(() => {
     setInputValue(query);
     if (query.length >= 2) {
-      setResults(searchProducts(query));
+      const found = searchProducts(query);
+      setResults(found);
+      if (found.length === 0) {
+        trackSearchNoResults(query);
+      } else {
+        trackSearchPerformed(query, found.length);
+      }
     } else {
       setResults([]);
     }
@@ -38,6 +51,7 @@ export function SearchPageContent() {
 
   const clearSearch = () => {
     setInputValue("");
+    trackSearchCleared();
     router.push("/busca");
     inputRef.current?.focus();
   };
@@ -92,8 +106,10 @@ export function SearchPageContent() {
         {/* Results grid */}
         {results.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {results.map((product) => (
-              <ProductCard key={product.id} product={product} />
+            {results.map((product, index) => (
+              <div key={product.id} onClick={() => trackSearchResultClick(product.id, product.name, query, index)}>
+                <ProductCard product={product} />
+              </div>
             ))}
           </div>
         ) : query.length >= 2 ? (
@@ -108,15 +124,16 @@ export function SearchPageContent() {
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               {[
-                { href: "/iphone", label: "iPhones" },
-                { href: "/mac", label: "MacBooks" },
-                { href: "/ipad", label: "iPads" },
-                { href: "/acessorios", label: "Acessórios" },
+                { href: "/iphone", label: "iPhones", slug: "iphone" },
+                { href: "/mac", label: "MacBooks", slug: "mac" },
+                { href: "/ipad", label: "iPads", slug: "ipad" },
+                { href: "/acessorios", label: "Acessórios", slug: "acessorios" },
               ].map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
                   className="px-5 py-2 rounded-full border border-white/[0.12] text-sm text-[#A1A1A6] hover:text-white hover:border-white/30 transition-colors"
+                  onClick={() => trackSearchCategoryShortcutClick(link.slug)}
                 >
                   {link.label}
                 </a>

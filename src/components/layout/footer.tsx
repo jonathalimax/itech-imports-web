@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { Instagram, MessageCircle, MapPin } from "lucide-react";
 import { NAV_LINKS, SITE_NAME, WHATSAPP_NUMBER, INSTAGRAM_HANDLE } from "@/lib/constants";
+import { trackWhatsAppClickFooter, trackInstagramClick } from "@/lib/analytics";
 
 export function Footer() {
   return (
@@ -48,6 +51,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-sm text-[#A1A1A6] hover:text-white transition-colors"
+                  onClick={trackWhatsAppClickFooter}
                 >
                   <MessageCircle className="h-4 w-4 text-green-500" />
                   WhatsApp
@@ -59,6 +63,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-sm text-[#A1A1A6] hover:text-white transition-colors"
+                  onClick={trackInstagramClick}
                 >
                   <Instagram className="h-4 w-4 text-pink-500" />
                   {INSTAGRAM_HANDLE}

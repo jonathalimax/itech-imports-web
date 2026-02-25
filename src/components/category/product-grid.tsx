@@ -7,6 +7,7 @@ import { SortDropdown } from "./sort-dropdown";
 import { ProductCard } from "@/components/product/product-card";
 import { SkeletonCard } from "@/components/ui/skeleton-card";
 import type { Product, SortOption } from "@/types";
+import { trackFilterApplied, trackFilterCleared, trackSortChanged } from "@/lib/analytics";
 
 interface ProductGridProps {
   initialProducts: Product[];
@@ -67,7 +68,7 @@ export function ProductGrid({ initialProducts }: ProductGridProps) {
             {filtered.length} produto{filtered.length !== 1 ? "s" : ""}
           </span>
         </div>
-        <SortDropdown value={sort} onChange={setSort} />
+        <SortDropdown value={sort} onChange={(v) => { setSort(v); trackSortChanged(v); }} />
       </div>
 
       {/* Filter bar */}
@@ -78,7 +79,7 @@ export function ProductGrid({ initialProducts }: ProductGridProps) {
             <input
               type="number"
               value={minPrice}
-              onChange={(e) => setMinPrice(e.target.value)}
+              onChange={(e) => { setMinPrice(e.target.value); if (e.target.value) trackFilterApplied(Number(e.target.value), maxPrice ? Number(maxPrice) : undefined); }}
               placeholder="0"
               className="w-28 bg-white/[0.04] border border-white/[0.10] text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#0A84FF]"
             />
@@ -88,13 +89,13 @@ export function ProductGrid({ initialProducts }: ProductGridProps) {
             <input
               type="number"
               value={maxPrice}
-              onChange={(e) => setMaxPrice(e.target.value)}
+              onChange={(e) => { setMaxPrice(e.target.value); if (e.target.value) trackFilterApplied(minPrice ? Number(minPrice) : undefined, Number(e.target.value)); }}
               placeholder="99999"
               className="w-28 bg-white/[0.04] border border-white/[0.10] text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#0A84FF]"
             />
           </div>
           <button
-            onClick={() => { setMinPrice(""); setMaxPrice(""); }}
+            onClick={() => { setMinPrice(""); setMaxPrice(""); trackFilterCleared(); }}
             className="text-xs text-[#6E6E73] hover:text-white underline"
           >
             Limpar filtros
@@ -107,7 +108,7 @@ export function ProductGrid({ initialProducts }: ProductGridProps) {
         <div className="py-24 text-center">
           <p className="text-[#6E6E73] text-lg">Nenhum produto encontrado com esses filtros.</p>
           <button
-            onClick={() => { setMinPrice(""); setMaxPrice(""); setSort("relevante"); }}
+            onClick={() => { setMinPrice(""); setMaxPrice(""); setSort("relevante"); trackFilterCleared(); }}
             className="mt-4 text-[#0A84FF] text-sm hover:underline"
           >
             Limpar todos os filtros

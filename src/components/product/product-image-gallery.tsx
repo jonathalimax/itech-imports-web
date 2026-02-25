@@ -5,19 +5,22 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { ProductImage } from "@/types";
+import { trackProductImageClicked } from "@/lib/analytics";
 
 interface ProductImageGalleryProps {
   images: ProductImage[];
   productName: string;
+  productId?: string;
 }
 
-export function ProductImageGallery({ images, productName }: ProductImageGalleryProps) {
+export function ProductImageGallery({ images, productName, productId = "" }: ProductImageGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
   const goTo = (index: number) => {
     setDirection(index > activeIndex ? 1 : -1);
     setActiveIndex(index);
+    if (productId) trackProductImageClicked(productId, index);
   };
 
   const prev = () => goTo(Math.max(0, activeIndex - 1));

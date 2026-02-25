@@ -7,6 +7,8 @@ import { ProductImageGallery } from "@/components/product/product-image-gallery"
 import { ProductInfo } from "@/components/product/product-info";
 import { ProductSpecs } from "@/components/product/product-specs";
 import { ProductCard } from "@/components/product/product-card";
+import { ProductViewTracker } from "@/components/product/product-view-tracker";
+import { RelatedProductsSection } from "@/components/product/related-products-section";
 import { SITE_NAME } from "@/lib/constants";
 
 interface Props {
@@ -58,6 +60,12 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-[#080808] pt-20">
+      <ProductViewTracker
+        productId={product.id}
+        productName={product.name}
+        category={product.category}
+        price={product.basePrice}
+      />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 py-6 text-sm text-[#6E6E73]" aria-label="Breadcrumb">
@@ -70,28 +78,17 @@ export default async function ProductPage({ params }: Props) {
 
         {/* Product hero */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 pb-16">
-          <ProductImageGallery images={product.images} productName={product.name} />
+          <ProductImageGallery images={product.images} productName={product.name} productId={product.id} />
           <ProductInfo product={product} />
         </div>
 
         {/* Specs */}
         <div className="border-t border-white/[0.06] py-16">
-          <ProductSpecs specs={product.specs} description={product.description} />
+          <ProductSpecs specs={product.specs} description={product.description} productId={product.id} />
         </div>
 
         {/* Related products */}
-        {related.length > 0 && (
-          <div className="border-t border-white/[0.06] py-16">
-            <h2 className="font-display font-bold text-2xl text-white mb-8">
-              Você também pode gostar
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {related.map((p) => (
-                <ProductCard key={p.id} product={p} />
-              ))}
-            </div>
-          </div>
-        )}
+        <RelatedProductsSection products={related} />
       </div>
     </div>
   );

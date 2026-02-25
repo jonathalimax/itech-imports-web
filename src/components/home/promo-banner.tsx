@@ -5,6 +5,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Truck, CreditCard, Package } from "lucide-react";
+import { trackPromoBannerCtaClick } from "@/lib/analytics";
 
 const trustFeatures = [
   {
@@ -64,7 +65,7 @@ export function PromoBanner() {
               className="bg-[#0A84FF] hover:bg-[#0A84FF]/90 text-white rounded-full px-8 font-medium glow-blue"
               asChild
             >
-              <Link href="/iphone">
+              <Link href="/iphone" onClick={() => trackPromoBannerCtaClick("ver_iphones")}>
                 Ver iPhones
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
@@ -75,7 +76,7 @@ export function PromoBanner() {
               className="border-white/[0.15] text-white hover:bg-white/5 rounded-full px-8 font-medium"
               asChild
             >
-              <Link href="/mac">Ver MacBooks</Link>
+              <Link href="/mac" onClick={() => trackPromoBannerCtaClick("ver_macbooks")}>Ver MacBooks</Link>
             </Button>
           </div>
         </motion.div>

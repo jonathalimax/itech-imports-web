@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useCartStore } from "@/store/cart.store";
+import { AnalyticsProvider } from "@/components/analytics-provider";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   // Rehydrate cart store from localStorage after mount
@@ -9,5 +10,5 @@ export function Providers({ children }: { children: React.ReactNode }) {
     useCartStore.persist.rehydrate();
   }, []);
 
-  return <>{children}</>;
+  return <AnalyticsProvider>{children}</AnalyticsProvider>;
 }

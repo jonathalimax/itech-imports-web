@@ -9,6 +9,7 @@ import { Mail, CheckCircle2 } from "lucide-react";
 import { newsletterSchema, type NewsletterFormData } from "@/schemas/newsletter.schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { trackNewsletterSubmitSuccess, trackNewsletterSubmitError } from "@/lib/analytics";
 
 export function NewsletterSection() {
   const [submitted, setSubmitted] = useState(false);
@@ -25,9 +26,14 @@ export function NewsletterSection() {
   });
 
   const onSubmit = async (_data: NewsletterFormData) => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setSubmitted(true);
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 800));
+      setSubmitted(true);
+      trackNewsletterSubmitSuccess();
+    } catch (err) {
+      trackNewsletterSubmitError(err instanceof Error ? err.message : "unknown");
+    }
   };
 
   return (

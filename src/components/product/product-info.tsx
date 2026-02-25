@@ -9,6 +9,13 @@ import { Button } from "@/components/ui/button";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 import type { Product } from "@/types";
+import {
+  trackAddToCart,
+  trackCartDrawerOpened,
+  trackStorageVariantSelected,
+  trackColorVariantSelected,
+  trackWhatsAppClickProduct,
+} from "@/lib/analytics";
 
 interface ProductInfoProps {
   product: Product;
@@ -56,12 +63,21 @@ export function ProductInfo({ product }: ProductInfoProps) {
       price,
       quantity: 1,
     });
+    trackAddToCart(
+      product.id,
+      product.name,
+      selectedStorage?.label ?? "Padrão",
+      selectedColor?.label ?? "Padrão",
+      price
+    );
+    trackCartDrawerOpened("add_to_cart");
     await new Promise((r) => setTimeout(r, 300));
     setAdding(false);
     openCart();
   };
 
   const handleWhatsAppNow = () => {
+    trackWhatsAppClickProduct(product.id, product.name, price);
     const url = buildWhatsAppUrl([
       {
         id: itemId,
@@ -111,7 +127,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
             {product.storageVariants.map((v) => (
               <button
                 key={v.id}
-                onClick={() => setSelectedStorageId(v.id)}
+                onClick={() => { setSelectedStorageId(v.id); trackStorageVariantSelected(product.id, v.label, v.priceDelta); }}
                 disabled={!v.available}
                 className={cn(
                   "px-4 py-2 rounded-xl text-sm font-medium border transition-all duration-200",
@@ -143,7 +159,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
             {product.colorVariants.map((v) => (
               <button
                 key={v.id}
-                onClick={() => setSelectedColorId(v.id)}
+                onClick={() => { setSelectedColorId(v.id); trackColorVariantSelected(product.id, v.label); }}
                 disabled={!v.available}
                 title={v.label}
                 className={cn(

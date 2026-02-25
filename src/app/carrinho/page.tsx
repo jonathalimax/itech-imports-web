@@ -18,6 +18,13 @@ import { formatBRL } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
+import {
+  trackWhatsAppClickCartPage,
+  trackCartItemQuantityChanged,
+  trackCartItemRemoved,
+  trackCartListCleared,
+  trackCartContinueShoppingClick,
+} from "@/lib/analytics";
 
 function useMounted(): boolean {
   const [mounted, setMounted] = useState(false);
@@ -47,8 +54,30 @@ export default function CartPage() {
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
 
   function handleWhatsApp() {
+    trackWhatsAppClickCartPage(totalItems, subtotal);
     const url = buildWhatsAppUrl(items);
     window.open(url, "_blank", "noopener,noreferrer");
+  }
+
+  function handleQuantityChange(itemId: string, productId: string, newQty: number, currentQty: number) {
+    if (newQty < 1) {
+      const item = items.find((i) => i.id === itemId);
+      if (item) trackCartItemRemoved(item.productId, item.name, item.price);
+    } else {
+      trackCartItemQuantityChanged(productId, newQty > currentQty ? "increase" : "decrease", newQty);
+    }
+    updateQuantity(itemId, newQty);
+  }
+
+  function handleRemoveItem(itemId: string) {
+    const item = items.find((i) => i.id === itemId);
+    if (item) trackCartItemRemoved(item.productId, item.name, item.price);
+    removeItem(itemId);
+  }
+
+  function handleClearCart() {
+    trackCartListCleared(totalItems);
+    clearCart();
   }
 
   return (
@@ -156,7 +185,7 @@ export default function CartPage() {
                         )}
                       </div>
                       <button
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => handleRemoveItem(item.id)}
                         className="text-[#6E6E73] hover:text-red-400 transition-colors flex-shrink-0"
                         aria-label={`Remover ${item.name}`}
                       >
@@ -167,7 +196,7 @@ export default function CartPage() {
                     <div className="flex items-center justify-between mt-3">
                       <div className="flex items-center gap-2">
                         <button
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          onClick={() => handleQuantityChange(item.id, item.productId, item.quantity - 1, item.quantity)}
                           className="flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.12] text-white hover:border-white/30 transition-colors"
                           aria-label="Diminuir quantidade"
                         >
@@ -177,7 +206,7 @@ export default function CartPage() {
                           {item.quantity}
                         </span>
                         <button
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          onClick={() => handleQuantityChange(item.id, item.productId, item.quantity + 1, item.quantity)}
                           className="flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.12] text-white hover:border-white/30 transition-colors"
                           aria-label="Aumentar quantidade"
                         >
@@ -253,7 +282,7 @@ export default function CartPage() {
 
                 {/* Secondary actions */}
                 <button
-                  onClick={clearCart}
+                  onClick={handleClearCart}
                   className="w-full text-sm text-[#6E6E73] hover:text-red-400 transition-colors py-1"
                 >
                   Limpar lista
@@ -262,6 +291,7 @@ export default function CartPage() {
                 <Link
                   href="/iphone"
                   className="block text-center text-sm text-[#A1A1A6] hover:text-white transition-colors"
+                  onClick={trackCartContinueShoppingClick}
                 >
                   Continuar explorando
                 </Link>

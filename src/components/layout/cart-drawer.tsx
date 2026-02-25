@@ -9,12 +9,45 @@ import { useCartStore, useCartItems, useCartIsOpen, useCartSubtotal } from "@/st
 import { formatBRL } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import {
+  trackCartDrawerClosed,
+  trackCartItemQuantityChanged,
+  trackCartItemRemoved,
+  trackWhatsAppClickCartDrawer,
+  trackCartContinueShoppingClick,
+} from "@/lib/analytics";
 
 export function CartDrawer() {
   const isOpen = useCartIsOpen();
   const items = useCartItems();
   const subtotal = useCartSubtotal();
   const { closeCart, updateQuantity, removeItem } = useCartStore();
+
+  const handleClose = () => {
+    trackCartDrawerClosed();
+    closeCart();
+  };
+
+  const handleQuantityChange = (itemId: string, productId: string, newQty: number, currentQty: number) => {
+    if (newQty < 1) {
+      const item = items.find((i) => i.id === itemId);
+      if (item) trackCartItemRemoved(item.productId, item.name, item.price);
+    } else {
+      trackCartItemQuantityChanged(productId, newQty > currentQty ? "increase" : "decrease", newQty);
+    }
+    updateQuantity(itemId, newQty);
+  };
+
+  const handleRemoveItem = (itemId: string) => {
+    const item = items.find((i) => i.id === itemId);
+    if (item) trackCartItemRemoved(item.productId, item.name, item.price);
+    removeItem(itemId);
+  };
+
+  const handleWhatsApp = () => {
+    trackWhatsAppClickCartDrawer(totalItems, subtotal);
+    closeCart();
+  };
 
   // Prevent body scroll when open
   useEffect(() => {
@@ -41,7 +74,7 @@ export function CartDrawer() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="fixed inset-0 bg-black/60 z-50 backdrop-blur-sm"
-            onClick={closeCart}
+            onClick={handleClose}
             aria-hidden="true"
           />
 
@@ -66,7 +99,7 @@ export function CartDrawer() {
                 )}
               </div>
               <button
-                onClick={closeCart}
+                onClick={handleClose}
                 className="flex h-8 w-8 items-center justify-center rounded-full text-[#A1A1A6] hover:text-white hover:bg-white/5 transition-colors"
                 aria-label="Fechar lista de interesse"
               >
@@ -126,7 +159,7 @@ export function CartDrawer() {
                         <div className="flex items-center gap-3 mt-2">
                           <div className="flex items-center gap-1">
                             <button
-                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                              onClick={() => handleQuantityChange(item.id, item.productId, item.quantity - 1, item.quantity)}
                               className="flex h-7 w-7 items-center justify-center rounded-full border border-white/[0.12] text-white hover:border-white/30 transition-colors"
                               aria-label={`Diminuir quantidade de ${item.name}`}
                             >
@@ -136,7 +169,7 @@ export function CartDrawer() {
                               {item.quantity}
                             </span>
                             <button
-                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                              onClick={() => handleQuantityChange(item.id, item.productId, item.quantity + 1, item.quantity)}
                               className="flex h-7 w-7 items-center justify-center rounded-full border border-white/[0.12] text-white hover:border-white/30 transition-colors"
                               aria-label={`Aumentar quantidade de ${item.name}`}
                             >
@@ -144,7 +177,7 @@ export function CartDrawer() {
                             </button>
                           </div>
                           <button
-                            onClick={() => removeItem(item.id)}
+                            onClick={() => handleRemoveItem(item.id)}
                             className="ml-auto text-[#6E6E73] hover:text-red-400 transition-colors"
                             aria-label={`Remover ${item.name} da lista`}
                           >
@@ -178,7 +211,7 @@ export function CartDrawer() {
                 <div className="space-y-2">
                   <Button
                     className="w-full bg-[#25D366] hover:bg-[#25D366]/90 text-white rounded-full font-medium flex items-center gap-2"
-                    onClick={closeCart}
+                    onClick={handleWhatsApp}
                     asChild
                   >
                     <Link href="/carrinho">
@@ -189,7 +222,7 @@ export function CartDrawer() {
                   <Button
                     variant="outline"
                     className="w-full border-white/[0.12] text-white hover:bg-white/5 rounded-full"
-                    onClick={closeCart}
+                    onClick={() => { trackCartContinueShoppingClick(); handleClose(); }}
                   >
                     Continuar explorando
                   </Button>

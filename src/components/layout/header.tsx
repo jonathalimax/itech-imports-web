@@ -9,6 +9,13 @@ import { useUIStore } from "@/store/ui.store";
 import { NAV_LINKS, SITE_NAME } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import {
+  trackNavClick,
+  trackMobileNavOpen,
+  trackMobileNavClose,
+  trackMobileNavItemClick,
+  trackCartDrawerOpened,
+} from "@/lib/analytics";
 
 function CartBadge() {
   const count = useCartItemCount();
@@ -33,6 +40,15 @@ export function Header() {
   const openCart = useCartStore((s) => s.openCart);
   const { isMobileNavOpen, toggleMobileNav, closeMobileNav } = useUIStore();
 
+  const handleToggleMobileNav = () => {
+    if (isMobileNavOpen) {
+      trackMobileNavClose();
+    } else {
+      trackMobileNavOpen();
+    }
+    toggleMobileNav();
+  };
+
   useEffect(() => {
     setMounted(true);
     const handler = () => setScrolled(window.scrollY > 20);
@@ -56,7 +72,7 @@ export function Header() {
             <Link
               href="/"
               className="flex items-center gap-2 text-white font-display font-bold text-xl tracking-tight"
-              onClick={closeMobileNav}
+              onClick={() => { closeMobileNav(); trackNavClick("logo"); }}
             >
               <span className="text-[#0A84FF]">i</span>Tech
             </Link>
@@ -68,6 +84,7 @@ export function Header() {
                   key={link.href}
                   href={link.href}
                   className="text-sm font-medium text-[#A1A1A6] hover:text-white transition-colors duration-200"
+                  onClick={() => trackNavClick(link.href.replace("/", "") || "home")}
                 >
                   {link.label}
                 </Link>
@@ -80,12 +97,13 @@ export function Header() {
                 href="/busca"
                 className="flex h-9 w-9 items-center justify-center rounded-full text-[#A1A1A6] hover:text-white hover:bg-white/5 transition-colors"
                 aria-label="Buscar produtos"
+                onClick={() => trackNavClick("search")}
               >
                 <Search className="h-4 w-4" />
               </Link>
 
               <button
-                onClick={openCart}
+                onClick={() => { openCart(); trackNavClick("cart"); trackCartDrawerOpened("cart_icon"); }}
                 className="relative flex h-9 w-9 items-center justify-center rounded-full text-[#A1A1A6] hover:text-white hover:bg-white/5 transition-colors"
                 aria-label="Abrir lista de interesse"
               >
@@ -104,7 +122,7 @@ export function Header() {
 
               {/* Mobile menu toggle */}
               <button
-                onClick={toggleMobileNav}
+                onClick={handleToggleMobileNav}
                 className="flex md:hidden h-9 w-9 items-center justify-center rounded-full text-[#A1A1A6] hover:text-white hover:bg-white/5 transition-colors"
                 aria-label={isMobileNavOpen ? "Fechar menu" : "Abrir menu"}
               >
@@ -140,7 +158,7 @@ export function Header() {
                   <Link
                     href={link.href}
                     className="text-lg font-medium text-white hover:text-[#0A84FF] transition-colors"
-                    onClick={closeMobileNav}
+                    onClick={() => { closeMobileNav(); trackMobileNavItemClick(link.href.replace("/", "") || "home"); }}
                   >
                     {link.label}
                   </Link>
